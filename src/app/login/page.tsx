@@ -2,8 +2,14 @@ import Image from "next/image";
 import Logo from "../../../public/logo.png";
 import Link from "next/link";
 import { LoginForm } from "@/components/forms/LoginForm";
+import { auth } from "../utils/auth";
+import { redirect } from "next/navigation";
 
-export default function Login() {
+export default async function Login() {
+  const session = await auth();
+  if (session?.user) {
+    return redirect("/");
+  }
   return (
     <div className="w-full h-screen flex justify-center items-center flex-col gap-4">
       <Link href="/">

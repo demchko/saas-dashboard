@@ -5,7 +5,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { signIn } from "@/app/utils/auth";
+import { SubmitButton } from "../custom/SubmitButton";
+import { Github, Mail } from "lucide-react";
 
 export const LoginForm = () => {
   return (
@@ -15,13 +17,20 @@ export const LoginForm = () => {
         <CardDescription>Login with Google or Github</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-2">
-        <form>
-          <Button className="w-full" variant="outline">
-            Login with Github
-          </Button>
+        <form
+          action={async () => {
+            "use server";
+            await signIn("github", { redirectTo: "/" });
+          }}
+        >
+          <SubmitButton
+            icon={<Github />}
+            text="Login with GitHub"
+            variant="outline"
+          />
         </form>
         <form>
-          <Button className="w-full">Login with Google</Button>
+          <SubmitButton icon={<Mail />} text="Login with Google" />
         </form>
       </CardContent>
     </Card>
