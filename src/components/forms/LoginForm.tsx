@@ -29,7 +29,12 @@ export const LoginForm = () => {
             variant="outline"
           />
         </form>
-        <form>
+        <form
+          action={async () => {
+            "use server";
+            await signIn("google", { redirectTo: "/" });
+          }}
+        >
           <SubmitButton icon={<Mail />} text="Login with Google" />
         </form>
       </CardContent>
