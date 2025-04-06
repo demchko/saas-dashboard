@@ -18,14 +18,26 @@ export async function NavBar() {
       <div className="flex gap-2 items-center">
         <ThemeToggle />
         {session?.user ? (
-          <form
-            action={async () => {
-              "use server";
-              await signOut({ redirectTo: "/" });
-            }}
-          >
-            <Button>Logout</Button>
-          </form>
+          <>
+            <Image
+              className="rounded-full"
+              src={
+                session.user.image ||
+                "https://png.pngtree.com/png-clipart/20200224/original/pngtree-cartoon-color-simple-male-avatar-png-image_5230557.jpg"
+              }
+              alt="logo"
+              width={40}
+              height={40}
+            />
+            <form
+              action={async () => {
+                "use server";
+                await signOut({ redirectTo: "/" });
+              }}
+            >
+              <Button>Logout</Button>
+            </form>
+          </>
         ) : (
           <Link href="/login" className={cn(buttonVariants())}>
             Login
