@@ -15,7 +15,7 @@ export async function NavBar() {
           SaaS<span className="text-primary">Dashboard</span>
         </Link>
       </div>
-      <div className="flex gap-2 items-center">
+      <div className="flex gap-4 items-center">
         <ThemeToggle />
         {session?.user ? (
           <>
@@ -35,7 +35,7 @@ export async function NavBar() {
                 await signOut({ redirectTo: "/" });
               }}
             >
-              <Button>Logout</Button>
+              <Button className="cursor-pointer" >Logout</Button>
             </form>
           </>
         ) : (
