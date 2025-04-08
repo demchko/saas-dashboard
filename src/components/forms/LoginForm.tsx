@@ -20,7 +20,7 @@ export const LoginForm = () => {
         <form
           action={async () => {
             "use server";
-            await signIn("github", { redirectTo: "/" });
+            await signIn("github", { redirectTo: "/onboarding" });
           }}
         >
           <SubmitButton
@@ -32,7 +32,7 @@ export const LoginForm = () => {
         <form
           action={async () => {
             "use server";
-            await signIn("google", { redirectTo: "/" });
+            await signIn("google", { redirectTo: "/onboarding" });
           }}
         >
           <SubmitButton icon={<Mail />} text="Login with Google" />
