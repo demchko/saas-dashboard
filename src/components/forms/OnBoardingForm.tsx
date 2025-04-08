@@ -1,33 +1,38 @@
-import { Factory, User } from "lucide-react";
-import { Button } from "../ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+"use client";
+import { useState } from "react";
+import { ChooseType } from "../onboarding/ChooseType"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
+import { CompanyForm } from "../onboarding/CompanyForm";
+import { SeekerForm } from "../onboarding/UserForm";
 
-export const OnBoardingForm = async ({ name }: { name: string | null | undefined }) => {
+export const OnBoardingForm = ({ name }: { name: string | null | undefined }) => {
+  const [step, setStep] = useState(1);
+  const [selectedType, setSelectedType] = useState<"company" | "user" | null>(null);
+
+  const handleSelectType = (val: "company" | "user") => {
+    setSelectedType(val);
+    setStep(2);
+  }
+
+  const backToType = () => setStep(1);
+
+  const renderStep = () => {
+    switch (step) {
+      case 1:
+        return <ChooseType handleSelectType={handleSelectType} />
+      case 2:
+        return selectedType === "company" ? <CompanyForm backToType={backToType} /> : <SeekerForm backToType={backToType} />
+    }
+  }
+
   return (
-    <Card className="w-100">
+    <Card className="w-100" >
       <CardHeader className="text-center">
         <CardTitle>Welcome, {name}</CardTitle>
-        <CardDescription>Choose how wouuld you like to use our platform</CardDescription>
+        <CardDescription>Choose how would you like to use our platform</CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4">
-        <Button className="h-auto gap-4 cursor-pointer py-4" >
-          <div className="w-12 h-12 rounded-full border border-white flex items-center justify-center" >
-            <Factory className="min-w-6 min-h-6 max-w-6 max-h-6" />
-          </div>
-          <div className="text-left" >
-            <p className="text-xl font-semibold">Company/Organization</p>
-            <p>Post jobs and find talent</p>
-          </div>
-        </Button>
-        <Button className="h-auto gap-4 cursor-pointer py-4" >
-          <div className="w-12 h-12 rounded-full border border-white flex items-center justify-center" >
-            <User className="min-w-6 min-h-6 max-w-6 max-h-6" />
-          </div>
-          <div className="text-left" >
-            <p className="text-xl font-semibold">Job Seeker</p>
-            <p>Find your dream job opportunity</p>
-          </div>
-        </Button>
+      <CardContent className="flex flex-col gap-4" >
+        {renderStep()}
       </CardContent>
     </Card>
   )
