@@ -20,7 +20,7 @@ export default async function OnBoarding() {
           </h1>
         </div>
       </Link>
-      <OnBoardingForm name={session.user.name} />
+      <OnBoardingForm name={session?.user.name} />
     </div>
   )
 }
