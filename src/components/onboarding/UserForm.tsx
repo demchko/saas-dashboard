@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form"
 import { Button } from "../ui/button"
-import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import { z } from "zod"
 import { seekerSchema } from "@/app/utils/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -24,13 +24,14 @@ export const SeekerForm = ({ backToType }: { backToType: () => void }) => {
   return (
     <div>
       <Form {...form} >
-        <form className="flex flex-col gap-4" >
+        <form className="flex flex-col gap-4" onSubmit={form.handleSubmit(onSubmit)} >
           <FormField control={form.control} name="name" render={({ field }) => (
             <FormItem >
               <FormLabel>Full Name</FormLabel>
               <FormControl>
                 <Input {...field} placeholder="Enter your fill name" />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )} />
           <FormField control={form.control} name="about" render={({ field }) => (
@@ -39,6 +40,7 @@ export const SeekerForm = ({ backToType }: { backToType: () => void }) => {
               <FormControl>
                 <Textarea className="max-h-[200px]" {...field} placeholder="Enter short about you" />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )} />
           <div className="flex gap-4 items-center" >
