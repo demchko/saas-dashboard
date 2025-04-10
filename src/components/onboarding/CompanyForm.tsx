@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form"
 import { Button } from "../ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import { z } from "zod"
-import { companySchema } from "@/app/utils/companySchema"
+import { companySchema } from "@/app/utils/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "../ui/input"
 import { ArrowBigLeft, ArrowBigRight } from "lucide-react"
@@ -28,7 +28,7 @@ export const CompanyForm = ({ backToType }: { backToType: () => void }) => {
   }
 
   return (
-    <div className="flex flex-col gap-4" >
+    <div >
       <Form {...form} >
         <form className="flex flex-col gap-4" onSubmit={form.handleSubmit(onSubmit)} >
           <div className="grid grid-cols-2 gap-4" >
@@ -98,7 +98,7 @@ export const CompanyForm = ({ backToType }: { backToType: () => void }) => {
             </FormItem>
           )} />
           <div className="flex gap-4 items-center" >
-            <Button className="w-1/2 cursor-pointer" variant="outline" onClick={backToType} ><ArrowBigLeft /> Cancel</Button>
+            <Button className="w-1/2 cursor-pointer" variant="outline" type="button" onClick={backToType} ><ArrowBigLeft /> Cancel</Button>
             <Button type="submit" className="w-1/2 cursor-pointer" >Continue <ArrowBigRight /></Button>
           </div>
         </form>

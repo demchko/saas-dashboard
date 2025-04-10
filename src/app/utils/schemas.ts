@@ -8,3 +8,9 @@ export const companySchema = z.object({
   website: z.string().url("Enter the valid url form"),
   xAccount: z.string().optional()
 })
+
+export const seekerSchema = z.object({
+  name: z.string().min(4, "At least 4 symbols"),
+  about: z.string().min(10, "At least 10 symbols"),
+  resume: z.string().min(1, "Please upload the resume")
+})
