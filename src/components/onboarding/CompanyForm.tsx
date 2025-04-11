@@ -5,16 +5,20 @@ import { z } from "zod"
 import { companySchema } from "@/app/utils/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "../ui/input"
-import { ArrowBigLeft, ArrowBigRight } from "lucide-react"
+import { ArrowBigLeft, ArrowBigRight, XIcon } from "lucide-react"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../ui/select"
 import { countryList } from "@/app/utils/countriesList"
 import { Textarea } from "../ui/textarea"
+import { UploadDropzone } from "../custom/UploadButton"
+import { createCompany } from "@/app/actions"
+import { useState } from "react"
+import Image from "next/image"
 
 export const CompanyForm = ({ backToType }: { backToType: () => void }) => {
   const form = useForm<z.infer<typeof companySchema>>({
     resolver: zodResolver(companySchema), defaultValues: {
       name: "",
-      localtion: "",
+      location: "",
       website: "",
       about: "",
       xAccount: "",
@@ -22,9 +26,17 @@ export const CompanyForm = ({ backToType }: { backToType: () => void }) => {
     }
   })
 
+  const [pending, setPending] = useState(false)
 
-  function onSubmit(val: z.infer<typeof companySchema>) {
-    console.log(val);
+  async function onSubmit(val: z.infer<typeof companySchema>) {
+    try {
+      setPending(true);
+      await createCompany(val)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setPending(false);
+    }
   }
 
   return (
@@ -39,7 +51,7 @@ export const CompanyForm = ({ backToType }: { backToType: () => void }) => {
               </FormControl>
               <FormMessage />
             </FormItem>)} />
-            <FormField control={form.control} name="localtion" render={({ field }) => (
+            <FormField control={form.control} name="location" render={({ field }) => (
               <FormItem>
                 <FormLabel>Country</FormLabel>
                 <Select defaultValue={field.value} onValueChange={field.onChange} >
@@ -97,9 +109,25 @@ export const CompanyForm = ({ backToType }: { backToType: () => void }) => {
               <FormMessage />
             </FormItem>
           )} />
+          <FormField control={form.control} name="logo" render={({ field }) => (
+            <FormItem>
+              <FormLabel>Company Logo</FormLabel>
+              <FormControl>
+                {field.value ? (
+                  <div className="w-fit relative" >
+                    <Image src={field.value} alt="Logo" width={100} height={100} className="rounded-lg object-fill" />
+                    <Button className="absolute right-0 top-0" size="icon" variant="destructive" onClick={() => field.onChange("")} ><XIcon className="size-4" /></Button>
+                  </div>
+                ) : <UploadDropzone endpoint="imageUploader" onClientUploadComplete={(res) => {
+                  field.onChange(res[0].url);
+                }} />}
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )} />
           <div className="flex gap-4 items-center" >
             <Button className="w-1/2 cursor-pointer" variant="outline" type="button" onClick={backToType} ><ArrowBigLeft /> Cancel</Button>
-            <Button type="submit" className="w-1/2 cursor-pointer" >Continue <ArrowBigRight /></Button>
+            <Button type="submit" className="w-1/2 cursor-pointer" disabled={pending}>{pending ? "Submitting" : <>Continue <ArrowBigRight /></>}</Button>
           </div>
         </form>
       </Form>
