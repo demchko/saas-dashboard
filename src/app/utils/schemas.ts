@@ -14,3 +14,12 @@ export const seekerSchema = z.object({
   about: z.string().min(10, "At least 10 symbols"),
   resume: z.string().min(1, "Please upload the resume")
 })
+
+export const postJobSchema = z.object({
+  title: z.string().min(4, "At least 4 symb"),
+  type: z.string().min(1, "At least 1 symbol"),
+  location: z.string().min(3, "At least 3 symbols"),
+  salaryFrom: z.number().min(1, "Salary is required"),
+  salaryTo: z.number().min(1, "Salary required"),
+  description: z.string().min(10, "Desrciption min 10 symbols")
+})
