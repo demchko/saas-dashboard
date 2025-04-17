@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import CompanyImg from "../../../../public/company.png";
 import Image from "next/image";
+import { CreateJobForm } from "@/components/forms/CreateJobForm";
 
 export default function PostJob() {
   return (
@@ -10,6 +11,9 @@ export default function PostJob() {
           <CardTitle>Job Information</CardTitle>
           <CardDescription>Add information about job</CardDescription>
         </CardHeader>
+        <CardContent>
+          <CreateJobForm />
+        </CardContent>
       </Card>
       <Card className="col-span-1" >
         <CardHeader>
