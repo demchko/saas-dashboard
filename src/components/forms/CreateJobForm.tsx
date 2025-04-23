@@ -9,6 +9,12 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSepa
 import { countryList } from "@/app/utils/countriesList";
 import { Textarea } from "../ui/textarea";
 import { Slider } from "../ui/slider";
+import { SalaryRange } from "../custom/SalaryRange";
+import { Button } from "../ui/button";
+import { SubmitButton } from "../custom/SubmitButton";
+import { Loader2, Send } from "lucide-react";
+import { createJobPost } from "@/app/actions";
+import { useState } from "react";
 
 const employmentType = [
   { value: "full", label: "Full Time" },
@@ -16,15 +22,28 @@ const employmentType = [
 ]
 
 export const CreateJobForm = () => {
+  const [pending, setPending] = useState(false);
   const form = useForm<z.infer<typeof postJobSchema>>({
     resolver: zodResolver(postJobSchema), defaultValues: {
       title: "",
       type: ""
     }
   });
+
+  async function submitForm(val: z.infer<typeof postJobSchema>) {
+    try {
+      setPending(true);
+      await createJobPost(val);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setPending(false);
+    }
+  }
+
   return (
     <Form {...form} >
-      <form className="flex flex-col gap-4" >
+      <form className="flex flex-col gap-4" onSubmit={form.handleSubmit(submitForm)} >
         <div className="grid grid-cols-2 gap-4" >
           <FormField control={form.control} name="title" render={({ field }) => (
             <FormItem className="col-span-1" >
@@ -87,32 +106,30 @@ export const CreateJobForm = () => {
               <FormMessage />
             </FormItem>
           )} />
-          {/* ##### NEED TO ADD CORRECT FIELD FORM CONTROL */}
-          <FormField control={form.control} name="type" render={({ field }) => (
-            <FormItem className="col-span-1" >
-              <FormLabel>Salary</FormLabel>
-              <FormControl>
-                <Slider
-                  min={300}
-                  max={10000}
-                  // step={step}
-                  // value={range}
-                  // onValueChange={handleRangeChange}
-                  className="py-4"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )} />
+          <FormItem className="col-span-1" >
+            <FormLabel>Salary</FormLabel>
+            <FormControl>
+              <SalaryRange control={form.control} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
         </div>
         <FormField control={form.control} name="description" render={({ field }) => (
           <FormItem>
             <FormLabel>Description</FormLabel>
             <FormControl>
-              <Textarea placeholder="Enter description for your job..." />
+              <Textarea placeholder="Enter description for your job..." {...field} />
             </FormControl>
+            <FormMessage />
           </FormItem>
         )} />
+        <Button disabled={pending} >
+          {
+            pending
+              ? <><Loader2 className="animate-spin" /> Submitting</>
+              : <> <Send /> Submit</>
+          }
+        </Button>
       </form>
     </Form>
   )
